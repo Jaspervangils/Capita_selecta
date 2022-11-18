@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="stylesheet.css">
+        <title>Kenteken registratie</title>
+  </head> 
+
+<h1>Kenteken registratie</h1>
+<body>
+    <form action="/registreer" method="post" id="form1">
+    Kenteken:<input type="text" name="kenteken">
+    <input type="submit" value="Submit">
+    </form>
+    {{ .Statuscode }}
+</body>
+</html>
