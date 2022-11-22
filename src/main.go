@@ -1,8 +1,12 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"html/template"
 	"net/http"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type PageData struct {
@@ -18,6 +22,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		if len(r.FormValue("kenteken")) != 8 {
 			code = "Geen geldig kenteken"
 		} else {
+			sqlWrite(r)
 			code = "Kenteken verstuurd"
 		}
 	}
@@ -33,7 +38,20 @@ func main() {
 	http.ListenAndServe(":80", nil)
 }
 
+func sqlWrite(r *http.Request) {
+
+	db, err := sql.Open("mysql", "Jasper:p23hzbdjdsYm@tcp(capitaselectadb.mysql.database.azure.com:3306)/csdb?tls=true")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer db.Close()
+	rows, err := db.Query("INSERT INTO `csdb`.`kenteken` (`KentekenID`) VALUES ('" + r.FormValue("kenteken") + "')")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer rows.Close()
+}
+
 // ga verder met json opslag https://dev.to/evilcel3ri/append-data-to-json-in-go-5gbj
 // en html info uit textbox/form https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/04.1.html
-
 //https://blog.logrocket.com/dockerizing-go-application/
